@@ -7,6 +7,8 @@ import nltk
 import numpy as np
 from nltk.stem import WordNetLemmatizer
 
+from nlp_bot_scalable.nlp.nltk_setup import ensure_nltk_data
+
 from tensorflow.keras.layers import Dense, Dropout
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import SGD
@@ -23,6 +25,7 @@ CLASSES_FILE = MODELS_DIR / "classes.pkl"
 MODEL_FILE = MODELS_DIR / "chatbot_model.h5"
 
 def train_model():
+    ensure_nltk_data()
     lemmatizer = WordNetLemmatizer()
 
     with open(INTENTS_FILE, encoding="utf-8") as file:

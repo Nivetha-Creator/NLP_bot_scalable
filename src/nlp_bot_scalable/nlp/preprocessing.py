@@ -1,18 +1,15 @@
-import nltk
 import numpy as np
+import nltk
 
 from nltk.stem import WordNetLemmatizer
 
-
-nltk.download("punkt")
-nltk.download("punkt_tab")
-nltk.download("wordnet")
-
+from nlp_bot_scalable.nlp.nltk_setup import ensure_nltk_data
 
 lemmatizer = WordNetLemmatizer()
 
 
 def clean_up_sentence(sentence: str) -> list[str]:
+    ensure_nltk_data()
     sentence_words = nltk.word_tokenize(sentence)
 
     return [
@@ -26,9 +23,9 @@ def bag_of_words(sentence: str, words: list[str]) -> np.ndarray:
 
     bag = [0] * len(words)
 
-    for w in sentence_words:
-        for i, word in enumerate(words):
-            if word == w:
-                bag[i] = 1
+    for word in sentence_words:
+        for index, vocabulary_word in enumerate(words):
+            if vocabulary_word == word:
+                bag[index] = 1
 
     return np.array(bag)

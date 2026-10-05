@@ -1,22 +1,29 @@
 from sqlalchemy.orm import Session
 
-from src.nlp_bot_scalable.database.chat_repository import save_chat
-from src.nlp_bot_scalable.database.models import ChatMessage
-from src.nlp_bot_scalable.nlp.predictor import ChatbotPredictor
+from nlp_bot_scalable.database.chat_repository import save_chat
+from nlp_bot_scalable.database.models import ChatMessage
+from nlp_bot_scalable.nlp.predictor import ChatbotPredictor
 
 
 class ChatService:
 
     def __init__(self):
-        self.predictor = ChatbotPredictor()
+        self._predictor: ChatbotPredictor | None = None
+
+    @property
+    def predictor(self) -> ChatbotPredictor:
+        if self._predictor is None:
+            self._predictor = ChatbotPredictor()
+        return self._predictor
 
     def chat(self, db: Session, user_message: str, user_id: int):
 
         message = user_message.lower().strip()
 
-        # Get the previous conversation
+        # Get the previous conversation for this user
         previous_chat = (
             db.query(ChatMessage)
+            .filter(ChatMessage.user_id == user_id)
             .order_by(ChatMessage.id.desc())
             .first()
         )
@@ -146,11 +153,11 @@ class ChatService:
         # ==================================================
 
         save_chat(
-    db=db,
-    user_id=user_id,
-    user_message=user_message,
-    bot_response=result["response"],
-    intent=result["intent"],
-)
+            db=db,
+            user_id=user_id,
+            user_message=user_message,
+            bot_response=result["response"],
+            intent=result["intent"],
+        )
 
         return result
