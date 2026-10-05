@@ -1,5 +1,51 @@
 const API_URL = window.location.origin;
 let currentUser = null;
+let authToken = localStorage.getItem("authToken");
+
+function authHeaders(extraHeaders = {}) {
+    const headers = { ...extraHeaders };
+
+    if (authToken) {
+        headers.Authorization = `Bearer ${authToken}`;
+    }
+
+    return headers;
+}
+
+function saveSession(data) {
+    currentUser = {
+        user_id: data.user_id,
+        username: data.username,
+        email: data.email,
+    };
+
+    if (data.access_token) {
+        authToken = data.access_token;
+        localStorage.setItem("authToken", authToken);
+    }
+
+    localStorage.setItem("currentUser", JSON.stringify(currentUser));
+}
+
+function restoreSession() {
+    const storedToken = localStorage.getItem("authToken");
+    const storedUser = localStorage.getItem("currentUser");
+
+    if (!storedToken || !storedUser) {
+        return false;
+    }
+
+    authToken = storedToken;
+    currentUser = JSON.parse(storedUser);
+    return true;
+}
+
+function clearSession() {
+    currentUser = null;
+    authToken = null;
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("currentUser");
+}
 const chatBox = document.getElementById("chat-box");
 const input = document.getElementById("message");
 const sendButton = document.getElementById("send-button");
@@ -754,20 +800,17 @@ async function sendMessage() {
     try {
 
         const response = await fetch(
-    `${API_URL}/chat`,
-    {
-        method: "POST",
-
-        headers: {
-            "Content-Type": "application/json"
-        },
-
-        body: JSON.stringify({
-            message: message,
-            user_id: currentUser.user_id
-        })
-    }
-);
+            `${API_URL}/chat`,
+            {
+                method: "POST",
+                headers: authHeaders({
+                    "Content-Type": "application/json"
+                }),
+                body: JSON.stringify({
+                    message: message
+                })
+            }
+        );
 
         if (!response.ok) {
             throw new Error("Server error");
@@ -972,7 +1015,7 @@ async function loginUser() {
 
         if (data.success) {
 
-            currentUser = data;
+            saveSession(data);
 
             message.textContent = "Login successful!";
 
@@ -1005,7 +1048,10 @@ async function showChatHistory() {
     try {
 
         const response = await fetch(
-            `${API_URL}/chat/history?user_id=${currentUser.user_id}`
+            `${API_URL}/chat/history`,
+            {
+                headers: authHeaders()
+            }
         );
 
         const history = await response.json();
@@ -1052,7 +1098,7 @@ async function showChatHistory() {
 }
 function logoutUser() {
 
-    currentUser = null;
+    clearSession();
 
     showLogin();
 }
@@ -1145,7 +1191,12 @@ function loadTheme() {
 
 document.addEventListener("DOMContentLoaded", () => {
     loadTheme();
-    showLogin();
+
+    if (restoreSession()) {
+        showMedicalHome();
+    } else {
+        showLogin();
+    }
 });
 function toggleAuthMode() {
 

@@ -43,16 +43,16 @@ python -m uvicorn nlp_bot_scalable.main:app --host 127.0.0.1 --port 8000
 - **API health check:** [http://127.0.0.1:8000/health](http://127.0.0.1:8000/health)
 - **OpenAPI docs:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
-Register an account in the UI, then sign in to use chat and medical services.
+Register an account in the UI, then sign in to use chat and medical services. Chat endpoints require a JWT bearer token returned by `/auth/login`.
 
 ## API overview
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
 | `/auth/register` | POST | Create a user account |
-| `/auth/login` | POST | Sign in |
-| `/chat` | POST | Send a chat message |
-| `/chat/history` | GET | Retrieve chat history for a user |
+| `/auth/login` | POST | Sign in and receive a JWT access token |
+| `/chat` | POST | Send a chat message (requires `Authorization: Bearer <token>`) |
+| `/chat/history` | GET | Retrieve chat history for the authenticated user |
 | `/medical/symptoms` | POST | Symptom checker |
 | `/medical/medicine` | POST | Medicine information |
 | `/medical/hospitals` | POST | Hospital finder |

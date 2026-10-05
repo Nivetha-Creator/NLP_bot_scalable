@@ -14,9 +14,10 @@ class ChatService:
 
         message = user_message.lower().strip()
 
-        # Get the previous conversation
+        # Get the previous conversation for this user
         previous_chat = (
             db.query(ChatMessage)
+            .filter(ChatMessage.user_id == user_id)
             .order_by(ChatMessage.id.desc())
             .first()
         )
@@ -146,11 +147,11 @@ class ChatService:
         # ==================================================
 
         save_chat(
-    db=db,
-    user_id=user_id,
-    user_message=user_message,
-    bot_response=result["response"],
-    intent=result["intent"],
-)
+            db=db,
+            user_id=user_id,
+            user_message=user_message,
+            bot_response=result["response"],
+            intent=result["intent"],
+        )
 
         return result

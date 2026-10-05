@@ -2,13 +2,12 @@ from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from nlp_bot_scalable.config.database import SessionLocal
+from nlp_bot_scalable.api.dependencies import get_db
 from nlp_bot_scalable.services.auth_service import AuthService
-
 
 router = APIRouter(
     prefix="/auth",
-    tags=["Authentication"]
+    tags=["Authentication"],
 )
 
 auth_service = AuthService()
@@ -25,35 +24,36 @@ class LoginRequest(BaseModel):
     password: str
 
 
-def get_db():
-    db = SessionLocal()
+class AuthResponse(BaseModel):
+    success: bool
+    message: str
+    user_id: int | None = None
+    username: str | None = None
+    email: str | None = None
+    access_token: str | None = None
+    token_type: str | None = None
 
-    try:
-        yield db
-    finally:
-        db.close()
 
-
-@router.post("/register")
+@router.post("/register", response_model=AuthResponse)
 def register(
     request: RegisterRequest,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     return auth_service.register(
         db,
         request.username,
         request.email,
-        request.password
+        request.password,
     )
 
 
-@router.post("/login")
+@router.post("/login", response_model=AuthResponse)
 def login(
     request: LoginRequest,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     return auth_service.login(
         db,
         request.email,
-        request.password
+        request.password,
     )

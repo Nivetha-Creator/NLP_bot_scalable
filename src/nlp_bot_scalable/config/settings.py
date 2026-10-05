@@ -12,6 +12,9 @@ class Settings(BaseSettings):
     database_url: str = f"sqlite:///{PROJECT_ROOT / 'chatbot.db'}"
     api_host: str = "127.0.0.1"
     api_port: int = 8000
+    jwt_secret: str = "change-me-in-production-use-a-long-secret-key"
+    jwt_algorithm: str = "HS256"
+    jwt_expire_minutes: int = 60
 
     model_config = SettingsConfigDict(
         env_file=".env",
