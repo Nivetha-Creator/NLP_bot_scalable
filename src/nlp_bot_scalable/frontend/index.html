@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Medical Assistant</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <div class="chat-app">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <div class="sidebar-title">
+                🏥 Medical Assistant
+            </div>
+
+            <button class="new-chat" id="new-chat">
+                + New Chat
+            </button>
+
+            <div class="sidebar-section">
+
+                <button class="sidebar-item" onclick="showChat()">
+                    💬 Chat
+                </button>
+
+                <button class="sidebar-item" onclick="checkSymptoms()">
+                    🩺 Symptom Checker
+                </button>
+
+                <button class="sidebar-item" onclick="getMedicineInfo()">
+                    💊 Medicine Information
+                </button>
+
+                <button class="sidebar-item" onclick="findHospitals()">
+                    🏥 Hospital Finder
+                </button>
+
+                <button class="sidebar-item" onclick="getMedicalKnowledge()">
+                    📚 Medical Knowledge
+                </button>
+
+            </div>
+
+            <div class="sidebar-divider"></div>
+
+            <div class="sidebar-section">
+
+                <button
+                    class="sidebar-item"
+                    onclick="showChatHistory()"
+                >
+                    🕘 Chat History
+                </button>
+
+                <button class="sidebar-item">
+                    ⭐ Saved
+                </button>
+
+            </div>
+
+            <div class="sidebar-divider"></div>
+
+            <div class="sidebar-section">
+
+    <button class="sidebar-item" onclick="showSettings()">
+        ⚙️ Settings
+    </button>
+
+    <button class="sidebar-item" onclick="showProfile()">
+        👤 Profile
+    </button>
+
+    <button class="sidebar-item" onclick="toggleTheme()">
+        🌙 Dark Mode
+    </button>
+
+</div>
+            <div class="sidebar-bottom">
+
+              <button
+    class="sidebar-item sign-out"
+    onclick="logoutUser()"
+>
+    🚪 Sign Out
+</button>
+
+            </div>
+
+        </aside>
+
+
+        <!-- MAIN -->
+        <main class="main">
+
+            <!-- HEADER -->
+            <header class="header">
+
+                <div class="header-left">
+
+                    <div class="header-avatar">
+                        🏥
+                    </div>
+
+                    <div>
+
+                        <h2>Medical Assistant</h2>
+
+                        <span>
+                            <i></i>
+                            Online
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <!-- CHAT AREA -->
+            <div class="chat-box" id="chat-box">
+
+                <div class="medical-home">
+
+                    <div class="welcome-icon">
+                        🏥
+                    </div>
+
+                    <h1>Medical Assistant</h1>
+
+                    <p class="home-description">
+                        Your AI-powered medical information assistant
+                    </p>
+
+                    <button
+                        class="chat-service-button"
+                        onclick="openChat()"
+                    >
+                        💬 Chat with Medical Assistant
+                    </button>
+
+                    <p class="medical-disclaimer">
+                        This assistant provides general medical information only
+                        and is not a substitute for professional medical advice.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- INPUT -->
+            <div class="input-wrapper">
+
+                <div class="input-box">
+
+                    <button
+                        class="plus"
+                        type="button"
+                    >
+                        +
+                    </button>
+
+                    <input
+                        type="text"
+                        id="message"
+                        placeholder="Message Medical Assistant..."
+                        autocomplete="off"
+                    >
+
+                    <button
+                        id="send-button"
+                        class="send"
+                        onclick="sendMessage()"
+                    >
+                        ↑
+                    </button>
+
+                </div>
+
+                <p class="disclaimer">
+                    Medical Assistant may provide incorrect information.
+                    Always consult a qualified healthcare professional for medical decisions.
+                </p>
+
+            </div>
+
+        </main>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
