@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from src.nlp_bot_scalable.services.medical_service import MedicalService
+from nlp_bot_scalable.services.medical_service import MedicalService
 
 
 router = APIRouter(

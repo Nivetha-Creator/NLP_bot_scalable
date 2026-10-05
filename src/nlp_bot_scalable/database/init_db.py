@@ -1,5 +1,5 @@
-from src.config.database import engine
-from src.nlp_bot_scalable.database.models import Base
+from nlp_bot_scalable.config.database import engine
+from nlp_bot_scalable.database.models import Base
 
 
 def init_db():
