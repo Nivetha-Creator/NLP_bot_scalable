@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 
-from src.nlp_bot_scalable.database.chat_repository import save_chat
-from src.nlp_bot_scalable.database.models import ChatMessage
-from src.nlp_bot_scalable.nlp.predictor import ChatbotPredictor
+from nlp_bot_scalable.database.chat_repository import save_chat
+from nlp_bot_scalable.database.models import ChatMessage
+from nlp_bot_scalable.nlp.predictor import ChatbotPredictor
 
 
 class ChatService:

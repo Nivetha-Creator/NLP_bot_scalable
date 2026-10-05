@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from src.config.database import SessionLocal
-from src.nlp_bot_scalable.services.auth_service import AuthService
+from nlp_bot_scalable.config.database import SessionLocal
+from nlp_bot_scalable.services.auth_service import AuthService
 
 
 router = APIRouter(

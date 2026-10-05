@@ -1,7 +1,7 @@
 from sqlalchemy import select
 
-from src.config.database import SessionLocal
-from src.nlp_bot_scalable.database.models import ChatMessage
+from nlp_bot_scalable.config.database import SessionLocal
+from nlp_bot_scalable.database.models import ChatMessage
 
 
 def test_database():
