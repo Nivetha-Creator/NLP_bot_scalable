@@ -1,5 +1,4 @@
-const API_URL = "http://127.0.0.1:8003";
-console.log("SCRIPT.JS IS WORKING");
+const API_URL = window.location.origin;
 let currentUser = null;
 const chatBox = document.getElementById("chat-box");
 const input = document.getElementById("message");
@@ -509,11 +508,25 @@ async function findHospitals() {
 
 
 async function getMedicalKnowledge() {
-    const value = prompt("Enter a medical topic:");
+
+    const value = document
+        .getElementById("knowledge-input")
+        .value
+        .trim();
 
     if (!value) {
+        alert("Please enter a medical topic.");
         return;
     }
+
+    const resultBox = document.getElementById("service-result");
+
+    resultBox.innerHTML = `
+        <div class="result-card">
+            <h2>📚 Loading Medical Knowledge...</h2>
+            <p>Please wait...</p>
+        </div>
+    `;
 
     try {
         const response = await fetch(
@@ -529,9 +542,9 @@ async function getMedicalKnowledge() {
 
         const data = await response.json();
 
-        chatBox.innerHTML = `
-            <div class="service-result">
-                <h3>📚 Medical Knowledge</h3>
+        resultBox.innerHTML = `
+            <div class="result-card">
+                <h2>📚 Medical Knowledge</h2>
 
                 <p><strong>Topic:</strong> ${data.topic}</p>
 
@@ -551,19 +564,19 @@ async function getMedicalKnowledge() {
                 ${data.prevention || "Not available"}
                 </p>
 
-                <p class="disclaimer">
+                <div class="medical-disclaimer">
                     ⚠️ ${data.disclaimer || ""}
-                </p>
+                </div>
             </div>
         `;
 
     } catch (error) {
         console.error(error);
 
-        chatBox.innerHTML = `
-            <div class="service-result">
-                <h3>📚 Medical Knowledge</h3>
-                <p>Unable to connect to the medical knowledge service.</p>
+        resultBox.innerHTML = `
+            <div class="result-card">
+                <h2>❌ Unable to load medical knowledge</h2>
+                <p>The medical knowledge service could not be reached. Please try again.</p>
             </div>
         `;
     }
@@ -573,6 +586,36 @@ async function getMedicalKnowledge() {
 /* =========================
    NORMAL CHAT
 ========================= */
+
+function showChat() {
+    openChat();
+}
+
+function showProfile() {
+
+    if (!currentUser) {
+        showLogin();
+        return;
+    }
+
+    chatBox.innerHTML = `
+        <div class="settings-container">
+
+            <h2>👤 Profile</h2>
+
+            <div class="settings-item">
+                <span>Username</span>
+                <span>${currentUser.username}</span>
+            </div>
+
+            <div class="settings-item">
+                <span>Email</span>
+                <span>${currentUser.email}</span>
+            </div>
+
+        </div>
+    `;
+}
 
 function openChat() {
 
@@ -695,6 +738,11 @@ async function sendMessage() {
 
     if (!message) return;
 
+    if (!currentUser) {
+        showLogin();
+        return;
+    }
+
     addMessage("user", message);
 
     input.value = "";
@@ -810,7 +858,6 @@ if (newChatButton) {
    START
 ========================= */
 
-;
 function showLogin() {
     chatBox.innerHTML = `
         <div class="login-container">
@@ -1096,7 +1143,10 @@ function loadTheme() {
 
 /* Run when page loads */
 
-document.addEventListener("DOMContentLoaded", loadTheme);
+document.addEventListener("DOMContentLoaded", () => {
+    loadTheme();
+    showLogin();
+});
 function toggleAuthMode() {
 
     const title = document.getElementById("auth-title");

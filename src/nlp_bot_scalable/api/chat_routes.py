@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
-from src.config.database import SessionLocal
-from src.nlp_bot_scalable.database.chat_repository import get_chat_history
-from src.nlp_bot_scalable.services.chat_service import ChatService
+from nlp_bot_scalable.config.database import SessionLocal
+from nlp_bot_scalable.database.chat_repository import get_chat_history
+from nlp_bot_scalable.services.chat_service import ChatService
 
 
 router = APIRouter(

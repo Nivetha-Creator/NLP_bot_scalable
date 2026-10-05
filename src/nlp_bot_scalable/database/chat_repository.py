@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from src.nlp_bot_scalable.database.models import ChatMessage
+from nlp_bot_scalable.database.models import ChatMessage
 
 
 def save_chat(
