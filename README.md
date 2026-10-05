@@ -28,14 +28,16 @@ The application runs with sensible defaults when no `.env` file is present.
 ## Run the server
 
 ```bash
+nlp-bot-scalable
+```
+
+Or directly with uvicorn:
+
+```bash
 uvicorn nlp_bot_scalable.main:app --host 127.0.0.1 --port 8000 --reload
 ```
 
-Or with environment variables from `.env`:
-
-```bash
-python -m uvicorn nlp_bot_scalable.main:app --host 127.0.0.1 --port 8000
-```
+Medical and chat POST endpoints accept JSON request bodies. Configure allowed browser origins with `CORS_ORIGINS` in `.env`.
 
 ## Use the application
 
@@ -53,10 +55,10 @@ Register an account in the UI, then sign in to use chat and medical services. Ch
 | `/auth/login` | POST | Sign in and receive a JWT access token |
 | `/chat` | POST | Send a chat message (requires `Authorization: Bearer <token>`) |
 | `/chat/history` | GET | Retrieve chat history for the authenticated user |
-| `/medical/symptoms` | POST | Symptom checker |
-| `/medical/medicine` | POST | Medicine information |
-| `/medical/hospitals` | POST | Hospital finder |
-| `/medical/knowledge` | POST | Medical knowledge lookup |
+| `/medical/symptoms` | POST | Symptom checker (`{"symptoms": "..."}`) |
+| `/medical/medicine` | POST | Medicine information (`{"medicine": "..."}`) |
+| `/medical/hospitals` | POST | Hospital finder (`{"city": "..."}`) |
+| `/medical/knowledge` | POST | Medical knowledge lookup (`{"topic": "..."}`) |
 
 ## Project layout
 

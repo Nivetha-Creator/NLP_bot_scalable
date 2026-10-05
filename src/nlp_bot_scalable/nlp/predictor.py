@@ -7,67 +7,62 @@ import numpy as np
 from nlp_bot_scalable.nlp.model_loader import load_chatbot
 from nlp_bot_scalable.nlp.preprocessing import bag_of_words
 
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
+INTENTS_FILE = PROJECT_ROOT / "intents.json"
+
 
 class ChatbotPredictor:
 
     def __init__(self):
-        # Load trained model, words, and classes
-        self.model, self.words, self.classes = load_chatbot()
+        self._model = None
+        self._words = None
+        self._classes = None
+        self._intents = None
 
-        # Find the project root directory
-        BASE_DIR = Path(__file__).resolve().parents[3]
+    def _ensure_loaded(self) -> None:
+        if self._model is not None:
+            return
 
-        # Path to intents.json
-        INTENTS_FILE = BASE_DIR / "intents.json"
+        self._model, self._words, self._classes = load_chatbot()
 
-        # Load intents
         with open(INTENTS_FILE, "r", encoding="utf-8") as file:
-            self.intents = json.load(file)["intents"]
+            self._intents = json.load(file)["intents"]
 
     def predict(self, sentence: str):
+        self._ensure_loaded()
 
-        # Convert sentence into bag of words
-        bow = bag_of_words(sentence, self.words)
+        bow = bag_of_words(sentence, self._words)
 
-        # Predict intent
-        results = self.model.predict(
+        results = self._model.predict(
             np.array([bow]),
-            verbose=0
+            verbose=0,
         )[0]
 
-        ERROR_THRESHOLD = 0.25
+        error_threshold = 0.25
 
-        # Filter predictions above threshold
         filtered_results = [
-            [i, probability]
-            for i, probability in enumerate(results)
-            if probability > ERROR_THRESHOLD
+            [index, probability]
+            for index, probability in enumerate(results)
+            if probability > error_threshold
         ]
 
-        # Sort by probability
         filtered_results.sort(
-            key=lambda x: x[1],
-            reverse=True
+            key=lambda item: item[1],
+            reverse=True,
         )
 
-        # No matching intent
         if not filtered_results:
             return {
                 "intent": None,
                 "probability": None,
-                "response": "Sorry, I didn't understand that."
+                "response": "Sorry, I didn't understand that.",
             }
 
-        # Get best intent
-        best_intent = self.classes[filtered_results[0][0]]
+        best_intent = self._classes[filtered_results[0][0]]
         best_probability = filtered_results[0][1]
-
-        # Default response
         response = "Sorry, I didn't understand that."
 
-        # Find response for the predicted intent
-        for intent in self.intents:
-
+        for intent in self._intents:
             if intent["tag"] == best_intent:
                 response = random.choice(intent["responses"])
                 break
@@ -75,14 +70,11 @@ class ChatbotPredictor:
         return {
             "intent": best_intent,
             "probability": str(best_probability),
-            "response": response
+            "response": response,
         }
 
 
 if __name__ == "__main__":
-
     predictor = ChatbotPredictor()
-
     result = predictor.predict("Hello")
-
     print(result)

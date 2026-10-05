@@ -320,9 +320,15 @@ async function checkSymptoms() {
     try {
 
         const response = await fetch(
-            `${API_URL}/medical/symptoms?symptoms=${encodeURIComponent(value)}`,
+            `${API_URL}/medical/symptoms`,
             {
-                method: "POST"
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    symptoms: value
+                })
             }
         );
 
@@ -396,9 +402,15 @@ async function getMedicineInfo() {
     try {
 
         const response = await fetch(
-            `${API_URL}/medical/medicine?medicine=${encodeURIComponent(value)}`,
+            `${API_URL}/medical/medicine`,
             {
-                method: "POST"
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    medicine: value
+                })
             }
         );
 
@@ -487,9 +499,15 @@ async function findHospitals() {
     try {
 
         const response = await fetch(
-            `${API_URL}/medical/hospitals?city=${encodeURIComponent(value)}`,
+            `${API_URL}/medical/hospitals`,
             {
-                method: "POST"
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    city: value
+                })
             }
         );
 
@@ -576,9 +594,15 @@ async function getMedicalKnowledge() {
 
     try {
         const response = await fetch(
-            `${API_URL}/medical/knowledge?topic=${encodeURIComponent(value)}`,
+            `${API_URL}/medical/knowledge`,
             {
-                method: "POST"
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    topic: value
+                })
             }
         );
 

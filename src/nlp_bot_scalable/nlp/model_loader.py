@@ -1,9 +1,6 @@
 import pickle
 from pathlib import Path
 
-from tensorflow.keras.models import load_model
-
-
 BASE_DIR = Path(__file__).resolve().parents[3]
 MODELS_DIR = BASE_DIR / "models"
 
@@ -13,6 +10,8 @@ CLASSES_FILE = MODELS_DIR / "classes.pkl"
 
 
 def load_chatbot():
+    from tensorflow.keras.models import load_model
+
     model = load_model(MODEL_FILE)
 
     with open(WORDS_FILE, "rb") as file:
